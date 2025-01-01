@@ -38,3 +38,25 @@ pub fn q3() -> i64 {
     }
     i
 }
+
+pub fn q6() -> i32 {
+    // (n(n+1)/2)^2 - n(n+1)(2n+1)/6 simplified
+    let n: i32 = 100;
+    (3*(n.pow(4)) + 2*(n.pow(3)) - 3*(n.pow(2)) - 200)/12
+}
+
+pub fn q15() -> u64 {
+    // 40!/(20!*20!) because there will be 40 moves and 20 down/20 right have to be part of it
+    let mut result = 1;
+
+    for i in 0..20 {
+        result = result * (40 - i) / (i + 1);
+    }
+
+    result
+}
+
+pub fn q13() -> u64 {
+    let q = std::fs::read_to_string("data/q13.txt").unwrap();
+    todo!();
+}
