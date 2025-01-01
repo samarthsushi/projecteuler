@@ -1,21 +1,8 @@
 fn sum_of_multiples_of_3_or_5_under_threshold(threshold: i32) -> i32 {
-    let blocks = threshold/30;
-    let rem = threshold % 30;
-
-    let mut x = 0;
-    for block_id in 0..blocks {
-        let block_offset = block_id * 30;
-        x += 225 + block_offset * 14;
-    }
-
-    for i in 1..rem {
-        let v = blocks * 30 + i;
-        if v % 3 == 0 || v % 5 == 0 {
-            x += v;
-        }
-    }
-
-    x
+    let n3 = (threshold-1)/3;
+    let n5 = (threshold-1)/5;
+    let n15 = (threshold-1)/15;
+    (n3*(2*3 + (n3-1)*3))/2 + (n5*(2*5 + (n5-1)*5))/2 - (n15*(2*15 + (n15-1)*15))/2
 }
 
 fn main() {
