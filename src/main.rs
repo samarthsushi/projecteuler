@@ -1,10 +1,11 @@
+use projecteuler::q7;
 #[allow(unused_imports)]
 use projecteuler::{q1,q2,q3,q6,q13,q15};
 use std::time::Instant;
 
 fn main() {
     let start = Instant::now();
-    let x = q15();
+    let x = q7();
     let dur = start.elapsed();
     println!("{}\n{:?}", x, dur);
 }

@@ -56,6 +56,22 @@ pub fn q15() -> u64 {
     result
 }
 
+pub fn q7() -> u64 {
+    let mut primes = vec![2,3];
+    let mut curr = 5;
+    let mut i = 3;
+    loop {
+        if i > 10001 { break; }
+        let mut is_prime = true;
+        for p in &primes {
+            if curr % p == 0 { is_prime = false; }
+        }
+        if is_prime { primes.push(curr); i+=1; }
+        curr+=2;
+    }
+    *primes.iter().last().unwrap()
+}
+
 pub fn q13() -> u64 {
     let q = std::fs::read_to_string("data/q13.txt").unwrap();
     todo!();
