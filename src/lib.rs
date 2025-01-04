@@ -1,3 +1,6 @@
+mod utils;
+use utils::is_prime;
+
 pub fn q1() -> i32 {
     let threshold = 1000;
     let n3 = (threshold-1)/3;
@@ -62,14 +65,71 @@ pub fn q7() -> u64 {
     let mut i = 3;
     loop {
         if i > 10001 { break; }
-        let mut is_prime = true;
-        for p in &primes {
-            if curr % p == 0 { is_prime = false; }
-        }
-        if is_prime { primes.push(curr); i+=1; }
+        if is_prime(curr, &primes) { primes.push(curr); i+=1; }
         curr+=2;
     }
     *primes.iter().last().unwrap()
+}
+
+pub fn q33() -> i32 {
+    let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47];
+    let mut prime_factors = vec![vec![0;15]];
+
+    fn reduce_fraction(num: i32, denom: i32, prime_factors: &Vec<Vec<i32>>) -> Vec<i32> {
+        let a = &prime_factors[num as usize];
+        let b = &prime_factors[denom as usize];
+
+        a   .iter()
+            .zip(b.iter())
+            .map(|(a,b)| (a - b).abs())
+            .collect()
+    }
+    for x in 1..100 {
+        // prime factorize all nums from 0 to 99 in terms of the numbers in `primes` slice 
+        // (a 15 len array that stores how many times that number appears in prime factor of x)
+        // i.e. 12 is [2,1,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        let mut x_clone = x;
+        let mut temp = vec![0;15];
+        for (i,p) in primes.iter().enumerate() {
+            loop {
+                if x_clone % p == 0 {
+                    temp[i] += 1;
+                    x_clone /= p;
+                } else {
+                    break;
+                }
+            }
+        }
+        prime_factors.push(temp);
+    }
+    for (i,p) in prime_factors.iter().enumerate() {
+        println!("{i}. {:?}", p);
+    }
+    let mut curious = vec![];
+
+    // remove actual division from this step, access the `prime factors` vec for both numerator and denom and cancel the common terms, to get smallest form of fraction
+    for xy in 10..99 {
+        let y = xy%10;
+        let x = xy/10;
+        // check against tens digit
+        for z in 0..10 {
+            let zx = format!("{z}{x}").parse::<i32>().unwrap();
+            if reduce_fraction(xy, zx, &prime_factors) == reduce_fraction(y, z, &prime_factors) {
+                curious.push((xy, zx));
+            }
+        }
+
+        // check agaisnt ones digit
+        for z in 0..10 {
+            let yz = format!("{y}{z}").parse::<i32>().unwrap();
+            if reduce_fraction(xy, yz, &prime_factors) == reduce_fraction(x, z, &prime_factors) {
+                curious.push((xy, yz));
+            }
+        }
+    }
+
+    println!("{:?}", curious);
+    curious[0].0
 }
 
 pub fn q13() -> u64 {
