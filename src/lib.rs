@@ -42,7 +42,27 @@ pub fn q3() -> i64 {
     i
 }
 
-pub fn q4() -> i64 {
+pub fn q4() -> i32 {
+    let mut max_palindrome = 0;
+    for a in 100..1000 {
+        for b in 100..1000 {
+            let ab = a * b;
+            let ab_vec = ab.to_string().chars().map(|c| c.to_digit(10).unwrap() as u8).collect::<Vec<u8>>();
+            let mut ptr1 = 0;
+            let mut ptr2 = ab_vec.len()-1;
+            let mut is_palindrome = true;
+            while ptr1 < ptr2 {
+                if ab_vec[ptr1] != ab_vec[ptr2] { is_palindrome = false; }
+                ptr1+=1;
+                ptr2-=1;
+            }
+            if is_palindrome && ab > max_palindrome { max_palindrome = ab; }
+        }
+    }
+    max_palindrome
+}
+
+pub fn q5() -> i64 {
     let factors = [19,18,17,16,15,14,13,12,11];
     let mut x = 2520;
     'outer: loop {
