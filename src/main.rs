@@ -7,5 +7,5 @@ fn main() {
     let start = Instant::now();
     let x = q33();
     let dur = start.elapsed();
-    println!("{}\n{:?}", x, dur);
+    println!("{:?}\n{:?}", x, dur);
 }

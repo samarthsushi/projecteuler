@@ -71,7 +71,8 @@ pub fn q7() -> u64 {
     *primes.iter().last().unwrap()
 }
 
-pub fn q33() -> i32 {
+pub fn q33() -> (i32, i32) {
+    // answer: 16/64 , 19/95 , 26/65 , 49/98
     let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47];
     let mut prime_factors = vec![vec![0;15]];
 
@@ -81,13 +82,10 @@ pub fn q33() -> i32 {
 
         a   .iter()
             .zip(b.iter())
-            .map(|(a,b)| (a - b).abs())
+            .map(|(a,b)| (a - b))
             .collect()
     }
     for x in 1..100 {
-        // prime factorize all nums from 0 to 99 in terms of the numbers in `primes` slice 
-        // (a 15 len array that stores how many times that number appears in prime factor of x)
-        // i.e. 12 is [2,1,0,0,0,0,0,0,0,0,0,0,0,0,0]
         let mut x_clone = x;
         let mut temp = vec![0;15];
         for (i,p) in primes.iter().enumerate() {
@@ -102,34 +100,27 @@ pub fn q33() -> i32 {
         }
         prime_factors.push(temp);
     }
-    for (i,p) in prime_factors.iter().enumerate() {
-        println!("{i}. {:?}", p);
-    }
     let mut curious = vec![];
-
-    // remove actual division from this step, access the `prime factors` vec for both numerator and denom and cancel the common terms, to get smallest form of fraction
     for xy in 10..99 {
         let y = xy%10;
         let x = xy/10;
-        // check against tens digit
-        for z in 0..10 {
-            let zx = format!("{z}{x}").parse::<i32>().unwrap();
-            if reduce_fraction(xy, zx, &prime_factors) == reduce_fraction(y, z, &prime_factors) {
-                curious.push((xy, zx));
-            }
+        for z in x..10 {
+            let zx = z*10 + x;
+            if zx < xy { continue; }
+            let xy_by_zx = reduce_fraction(xy, zx, &prime_factors);
+            if xy_by_zx.iter().all(|&a| a == 0) { continue; }
+            if xy_by_zx == reduce_fraction(y, z, &prime_factors) { curious.push((y, z)); }
         }
 
-        // check agaisnt ones digit
         for z in 0..10 {
-            let yz = format!("{y}{z}").parse::<i32>().unwrap();
-            if reduce_fraction(xy, yz, &prime_factors) == reduce_fraction(x, z, &prime_factors) {
-                curious.push((xy, yz));
-            }
+            let yz = y*10 + z;
+            if yz < xy { continue; }
+            let xy_by_yz = reduce_fraction(xy, yz, &prime_factors);
+            if xy_by_yz.iter().all(|&a| a == 0) { continue; }
+            if xy_by_yz == reduce_fraction(x, z, &prime_factors) { curious.push((x, z)); }
         }
     }
-
-    println!("{:?}", curious);
-    curious[0].0
+    curious.iter().fold((1,1), |acc: (i32, i32), &(x,y)| (acc.0 * x, acc.1 * y))
 }
 
 pub fn q13() -> u64 {
