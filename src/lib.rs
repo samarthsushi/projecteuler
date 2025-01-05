@@ -42,6 +42,21 @@ pub fn q3() -> i64 {
     i
 }
 
+pub fn q4() -> i64 {
+    let factors = [19,18,17,16,15,14,13,12,11];
+    let mut x = 2520;
+    'outer: loop {
+        for f in factors {
+            if x % f != 0 { 
+                x+=20; 
+                continue 'outer; 
+            }
+        }
+        break;
+    }
+    x
+}
+
 pub fn q6() -> i32 {
     // (n(n+1)/2)^2 - n(n+1)(2n+1)/6 simplified
     let n: i32 = 100;
