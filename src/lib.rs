@@ -106,6 +106,23 @@ pub fn q7() -> u64 {
     *primes.iter().last().unwrap()
 }
 
+pub fn q8() -> u64 {
+    let data = std::fs::read_to_string("data/q8.txt").unwrap();
+    let vec_chars: Vec<char> = data
+        .chars()
+        .filter(|c| !c.is_whitespace())
+        .collect();
+    println!("{:?}\n{}", vec_chars, vec_chars.len());
+    let mut ptr = 0;
+    let mut max_product = 0;
+    while ptr < vec_chars.len()-13 {
+        let x = vec_chars[ptr..ptr+13].iter().map(|a| a.to_digit(10).unwrap() as u64).product();
+        if x > max_product { max_product = x; }
+        ptr+=1;
+    }
+    max_product
+}
+
 pub fn q33() -> (i32, i32) {
     // answer: 16/64 , 19/95 , 26/65 , 49/98
     let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47];
