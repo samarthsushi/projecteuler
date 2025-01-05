@@ -1,5 +1,5 @@
 mod utils;
-use utils::is_prime;
+use utils::is_prime_u64;
 
 pub fn q1() -> i32 {
     let threshold = 1000;
@@ -95,15 +95,13 @@ pub fn q15() -> u64 {
 }
 
 pub fn q7() -> u64 {
-    let mut primes = vec![2,3];
-    let mut curr = 5;
-    let mut i = 3;
-    loop {
-        if i > 10001 { break; }
-        if is_prime(curr, &primes) { primes.push(curr); i+=1; }
+    let mut curr = 3;
+    let mut i = 2;
+    while i < 10001 {
         curr+=2;
+        if is_prime_u64(curr) { i+=1; } 
     }
-    *primes.iter().last().unwrap()
+    curr
 }
 
 pub fn q8() -> u64 {
@@ -121,6 +119,14 @@ pub fn q8() -> u64 {
         ptr+=1;
     }
     max_product
+}
+
+pub fn q10() -> u64 {
+    let mut sum = 5;
+    for x in (5..2_000_000).step_by(2) {
+        if is_prime_u64(x) { sum += x; }
+    }
+    sum
 }
 
 pub fn q33() -> (i32, i32) {
