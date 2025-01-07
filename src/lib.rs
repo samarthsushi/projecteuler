@@ -155,6 +155,42 @@ pub fn q26() -> u64 {
     max_cycle
 }
 
+pub fn q35() -> u64 {
+    fn valid_rotations(mut x: u64) -> bool {
+        let mut digits = Vec::new();
+        while x > 0 {
+            digits.push(x % 10);
+            x /= 10;
+        }
+        let len = digits.len();
+        digits.reverse();
+        for i in 0..len {
+            let r: Vec<u64> = digits
+                .iter()
+                .cycle()
+                .skip(i)
+                .take(len)
+                .cloned()
+                .collect();
+            let rotated_number = r
+                .iter()
+                .fold(0, |acc, &digit| acc * 10 + digit);
+            if !is_prime_u64(rotated_number) { return false; }
+        }
+        true
+    }
+    
+    let mut count = 13;
+    for x in (101..1_000_000).step_by(2) {
+        if is_prime_u64(x) { 
+            if valid_rotations(x){
+                count+=1;
+            }
+        }
+    }
+    count
+}
+
 pub fn q33() -> (i32, i32) {
     // answer: 16/64 , 19/95 , 26/65 , 49/98
     let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47];
