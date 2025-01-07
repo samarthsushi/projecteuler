@@ -129,6 +129,32 @@ pub fn q10() -> u64 {
     sum
 }
 
+pub fn q26() -> u64 {
+    fn cycle_length(n: u64) -> u64 {
+        let mut remainders = vec![-1; n.try_into().unwrap()];
+        let mut value = 1;
+        let mut position = 0;
+
+        while value != 0 {
+            if remainders[value] != -1 {
+                return position - remainders[value] as u64;
+            }
+            remainders[value] = position as isize;
+            value = (value * 10) % n as usize;
+            position += 1;
+        }
+        0
+    }
+
+    let mut max_cycle = 7;
+    for x in 11..1000 {
+        if is_prime_u64(x) {
+            if max_cycle < cycle_length(x) { max_cycle = x; };
+        }
+    }
+    max_cycle
+}
+
 pub fn q33() -> (i32, i32) {
     // answer: 16/64 , 19/95 , 26/65 , 49/98
     let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47];
