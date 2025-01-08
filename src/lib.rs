@@ -247,3 +247,23 @@ pub fn q13() -> u64 {
     let q = std::fs::read_to_string("data/q13.txt").unwrap();
     todo!();
 }
+
+pub fn q53() -> u128 {
+    fn selection(n: u128, r: u128) -> u128 {
+        let r = r.min(n - r);
+        let mut result = 1;
+
+        for i in 0..r {
+            result = result * (n - i) / (i + 1);
+        }
+    
+        result
+    }
+    let mut count = 0;
+    for n in 23..101 {
+        for r in 1..n {
+            if selection(n, r) > 1_000_000 { count += 1; }
+        }
+    }
+    count
+}
