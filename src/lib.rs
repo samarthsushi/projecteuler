@@ -1,6 +1,10 @@
 mod utils;
 use utils::is_prime_u64;
 
+use num_bigint::BigUint;
+use num_traits::{One, Zero};
+use std::ops::{Add, Mul, Sub};
+
 pub fn q1() -> i32 {
     let threshold = 1000;
     let n3 = (threshold-1)/3;
@@ -266,4 +270,57 @@ pub fn q53() -> u128 {
         }
     }
     count
+}
+
+pub fn q66() -> u64 {
+    // pell's equation is: x^2 - Dy^2 = 1
+    fn solve_pell(d: u64) -> Option<(BigUint, BigUint)> {
+        let sqrt_d = (d as f64).sqrt() as u64;
+        if sqrt_d * sqrt_d == d {
+            return None;
+        }
+    
+        let mut m = 0;
+        let mut d_k = 1;
+        let mut a_k = sqrt_d;
+    
+        let mut num1 = BigUint::one();
+        let mut num = BigUint::from(a_k);
+        let mut denom1 = BigUint::zero();
+        let mut denom = BigUint::one();
+    
+        loop {
+            let lhs = &num * &num;
+            let rhs = &denom * &denom * d;
+            if lhs == rhs.add(BigUint::one()) {
+                return Some((num, denom));
+            }
+    
+            m = d_k * a_k - m;
+            d_k = (d - m * m) / d_k;
+            a_k = (sqrt_d + m) / d_k;
+    
+            let next_num = BigUint::from(a_k) * &num + &num1;
+            let next_denom = BigUint::from(a_k) * &denom + &denom1;
+    
+            num1 = num;
+            num = next_num;
+    
+            denom1 = denom;
+            denom = next_denom;
+        }
+    }
+    let mut largest_x = BigUint::zero();
+    let mut result_d = 0;
+
+    for d in 2..=1000 {
+        if let Some((x, _y)) = solve_pell(d) {
+            if x > largest_x {
+                largest_x = x.clone();
+                result_d = d;
+            }
+        }
+    }
+
+    result_d
 }
