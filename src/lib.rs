@@ -252,6 +252,20 @@ pub fn q13() -> u64 {
     todo!();
 }
 
+pub fn q28() -> u64 {
+    let mut sum = 25;
+    let mut x = 9;
+
+    for side_length in (5..=1001).step_by(2) {
+        let side_length_decr = side_length - 1;
+        x += side_length_decr;
+        sum += 4*x + 6*(side_length_decr);
+        x += 3*(side_length_decr);
+    }
+
+    sum
+}
+
 pub fn q53() -> u128 {
     fn selection(n: u128, r: u128) -> u128 {
         let r = r.min(n - r);
@@ -276,6 +290,7 @@ pub fn q66() -> u64 {
     // pell's equation is: x^2 - Dy^2 = 1
     fn solve_pell(d: u64) -> Option<(BigUint, BigUint)> {
         let sqrt_d = (d as f64).sqrt() as u64;
+        // if D is a perfect square, no solution is possible
         if sqrt_d * sqrt_d == d {
             return None;
         }
