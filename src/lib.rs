@@ -256,8 +256,7 @@ pub fn q28() -> u64 {
     let mut sum = 25;
     let mut x = 9;
 
-    for side_length in (5..=1001).step_by(2) {
-        let side_length_decr = side_length - 1;
+    for side_length_decr in (4..1001).step_by(2) {
         x += side_length_decr;
         sum += 4*x + 6*(side_length_decr);
         x += 3*(side_length_decr);
